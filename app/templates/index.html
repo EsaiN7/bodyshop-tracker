@@ -1,14 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Bodyshop Tracker</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        nav a { margin-right: 20px; text-decoration: none; color: #333; }
+        .container { max-width: 800px; margin: auto; }
+    </style>
 </head>
 <body>
-    <h1>Vehicles</h1>
-    <ul>
-        {% for v in vehicles %}
-            <li>{{ v.make }} {{ v.model }} - {{ v.status }}</li>
-        {% endfor %}
-    </ul>
+    <div class="container">
+        <h1>Welcome to Bodyshop Tracker</h1>
+
+        <nav>
+            {% if current_user.is_authenticated %}
+                <span>Hello, {{ current_user.username }}!</span>
+                <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('auth.logout') }}">Logout</a>
+            {% else %}
+                <a href="{{ url_for('auth.login') }}">Login</a>
+            {% endif %}
+        </nav>
+
+        <hr>
+
+        <p>This is a simple vehicle management app for body shops.</p>
+        <p>Once logged in, you can view your assigned vehicles, update progress, and leave notes.</p>
+    </div>
 </body>
 </html>
