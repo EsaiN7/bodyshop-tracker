@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bodyshop Tracker</title>
+</head>
+<body>
+    <h1>Vehicles</h1>
+    <ul>
+        {% for v in vehicles %}
+            <li>{{ v.make }} {{ v.model }} - {{ v.status }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
