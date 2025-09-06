@@ -1,8 +1,10 @@
 from datetime import datetime
+from flask_login import UserMixin
 from app import objDB
+from werkzeug.security import generate_password_hash, check_password_hash
 
 # User roles: "manager" or "employee"
-class User(objDB.Model):
+class User(UserMixin,objDB.Model):
     id = objDB.Column(objDB.Integer, primary_key = True)
     username = objDB.Column(objDB.String(64), unique = True, nullable = False)
     password_hash = objDB.Column(objDB.String(128), nullable = False)
@@ -10,6 +12,13 @@ class User(objDB.Model):
 
     #relationship to vehicles
     vehicles = objDB.relationship('Vehicle', backref = 'assigned_employee', lazy = True)
+
+    #helper methods
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
 
 class Vehicle(objDB.Model):
@@ -31,4 +40,8 @@ class ProgressNote(objDB.Model):
     timestamp = objDB.Column(objDB.DateTime, default=datetime.utcnow)
 
     # link to user who made the note
-    user = objDB.relationship('User')
+    user = objDB.relationship('User', backref = 'notes')
+
+
+
+
