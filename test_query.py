@@ -15,7 +15,7 @@ with objApp.app_context():
     vehicles = Vehicle.query.all()
     print("\nVehicles:")
     for v in vehicles:
-        print(f"{v.id}: {v.make} {v.model}, VIN: {v.vin}, Status: {v.status}, Assigned to: {v.assigned_employee.username}")
+        print(f"{v.id}: {v.make} {v.model}, VIN: {v.vin}, Status: {v.status}")
 
     # --- Query all notes ---
     notes = ProgressNote.query.all()
