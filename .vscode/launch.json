@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Flask",
+            "type": "python",
+            "request": "launch",
+            "module": "flask",
+            "env": {
+                "FLASK_APP": "app",  // or "app.py" if that's your entrypoint
+                "FLASK_ENV": "development"
+            },
+            "args": [
+                "run",
+                "--no-debugger" // optional if you want to rely solely on VS Code's debugger
+            ],
+            "jinja": true
+        }
+    ]
+}

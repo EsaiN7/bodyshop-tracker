@@ -8,6 +8,17 @@
     <h1>Welcome {{ username }}!</h1>
     <p>Your role: {{ role }}</p>
 
+    <h2>Your Vehicles</h2>
+    <ul>
+        {% for vehicle in vehicles %}
+            <li>
+                {{ vehicle.make }} {{ vehicle.model }} (VIN: {{ vehicle.vin }}) – Status: {{ vehicle.status }}
+            </li>
+        {% else %}
+            <li>No vehicles assigned.</li>
+        {% endfor %}
+    </ul>
+
     <a href="{{ url_for('auth.logout') }}">Logout</a>
 </body>
 </html>
