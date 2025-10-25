@@ -23,10 +23,24 @@ def dashboard():
     vehicles = objDB.session.execute(text(vhcSql), {"user_id": current_user.id}).fetchall()
     # Example protected page
 
+    vhcStatusSql = "SELECT status, COUNT(*) as count FROM Vehicle WHERE assigned_to = :user_id GROUP BY status"
+
     print ("bro1")
    
     return render_template('dashboard.html',username = current_user.username, role = current_user.role, vehicles=vehicles)
     
+
+@objBP.route('/insert_vehicle')
+@login_required
+def insert_vehicle():
+    
+    #add if not exists, make vin primary key? to make sure no duplicates
+    vhcSql = "INSERT INTO Vehicle () VALUES ()"
+
+    vehicles = objDB.session.execute(text(vhcSql), {"user_id": current_user.id}).fetchall()
+
+    return render_template('dashboard.html',username = current_user.username, role = current_user.role, vehicles=vehicles)
+
 
 @objBP.route('/logout')
 @login_required
