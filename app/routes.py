@@ -23,6 +23,7 @@ def dashboard():
     return render_template('dashboard.html',username = current_user.username, role = current_user.role, vehicles=vehicles)
 
 
+
 from flask import request  # add this import at top
 
 @objBP.route('/add_vehicle', methods=['POST'])
