@@ -16,7 +16,7 @@
         <nav>
             {% if current_user.is_authenticated %}
                 <span>Hello, {{ current_user.username }}!</span>
-                <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('main.dashboard') }}"> My Dashboard</a>
                 <a href="{{ url_for('auth.logout') }}">Logout</a>
             {% else %}
                 <a href="{{ url_for('auth.login') }}">Login</a>
@@ -27,6 +27,7 @@
 
         <p>This is a simple vehicle management app for body shops.</p>
         <p>Once logged in, you can view your assigned vehicles, update progress, and leave notes.</p>
+        <h1>NOTE: This is still in active development.</h1>
     </div>
 </body>
 </html>

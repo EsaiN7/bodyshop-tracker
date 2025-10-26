@@ -2,19 +2,20 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Flask",
+            "name": "Flask Debug",
             "type": "python",
             "request": "launch",
-            "module": "flask",
+            "module": "flask",              // <-- MUST be module, not program
             "env": {
-                "FLASK_APP": "app",  // or "app.py" if that's your entrypoint
+                "FLASK_APP": "run.py",
                 "FLASK_ENV": "development"
             },
             "args": [
                 "run",
-                "--no-debugger" // optional if you want to rely solely on VS Code's debugger
+                "--no-reload"
             ],
-            "jinja": true
+            "jinja": true,
+            "justMyCode": true
         }
     ]
 }

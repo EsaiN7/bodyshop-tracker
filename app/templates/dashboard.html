@@ -3,6 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>Dashboard</title>
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            padding-top: 150px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background: white;
+            margin: auto;
+            padding: 20px;
+            width: 300px;
+            border-radius: 6px;
+        }
+        .close {
+            float: right;
+            font-size: 22px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <h1>Welcome {{ username }}!</h1>
@@ -13,12 +38,117 @@
         {% for vehicle in vehicles %}
             <li>
                 {{ vehicle.make }} {{ vehicle.model }} (VIN: {{ vehicle.vin }}) – Status: {{ vehicle.status }}
+                <button
+                    class="edit-btn" 
+                    data-id="{{ vehicle.id }}" 
+                    data-make="{{ vehicle.make }}" 
+                    data-model="{{ vehicle.model }}" 
+                    data-vin="{{ vehicle.vin }}" 
+                    data-status="{{ vehicle.status }}"
+                    onclick="openEditModal(this)">
+                    Edit
+                </button>
             </li>
         {% else %}
             <li>No vehicles assigned.</li>
         {% endfor %}
     </ul>
 
+    <h2>Manage Vehicle</h2>
+    <ul>
+        <li><a href="#" onclick="openModal('vehicleModal')">Add Vehicle</a></li>
+        <li><a href="#" onclick="openModal('vehicleRemoveModal')">Remove Vehicle</a></li>
+    </ul>
+
     <a href="{{ url_for('auth.logout') }}">Logout</a>
+
+    <!-- Add Vehicle Modal -->
+    <div id="vehicleModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal(this.closest('.modal'))">&times;</span>
+            <h3>Add Vehicle</h3>
+            <form action="{{ url_for('main.add_vehicle') }}" method="POST">
+                <input type="text" name="make" placeholder="Make" required><br>
+                <input type="text" name="model" placeholder="Model" required><br>
+                <input type="text" name="vin" placeholder="VIN" required><br><br>
+                <button type="submit">Submit Vehicle</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Remove Vehicle Modal -->
+    <div id="vehicleRemoveModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal(this.closest('.modal'))">&times;</span>
+            <h3>Remove Vehicles</h3>
+            <form action="{{ url_for('main.remove_vehicle') }}" method="POST">
+                <ul>
+                    {% for vehicle in vehicles %}
+                        <li>
+                            <input type="checkbox" name="vehicle_ids" value="{{ vehicle.id }}">
+                            {{ vehicle.make }} {{ vehicle.model }} (VIN: {{ vehicle.vin }}) – Status: {{ vehicle.status }}
+                        </li>
+                    {% else %}
+                        <li>No vehicles assigned.</li>
+                    {% endfor %}
+                </ul>
+                <button type="submit">Remove Selected Vehicles</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Vehicle Modal -->
+    <div id="vehicleEditModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal(this.closest('.modal'))">&times;</span>
+            <h3>Edit Vehicle</h3>
+            <form id="editVehicleForm" method="POST" action="{{ url_for('main.edit_vehicle') }}">
+                <input type="hidden" name="vehicle_id" id="editVehicleId">
+                <label>Make:</label>
+                <input type="text" name="make" id="editMake" required><br>
+                <label>Model:</label>
+                <input type="text" name="model" id="editModel" required><br>
+                <label>VIN:</label>
+                <input type="text" name="vin" id="editVin" required><br>
+                <label>Status:</label>
+                <input type="text" name="status" id="editStatus" required><br><br>
+                <button type="submit">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Open a modal by ID
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        // Open Edit modal and populate inputs
+        function openEditModal(btn) {
+            document.getElementById('editVehicleId').value = btn.dataset.id;
+            document.getElementById('editMake').value = btn.dataset.make;
+            document.getElementById('editModel').value = btn.dataset.model;
+            document.getElementById('editVin').value = btn.dataset.vin;
+            document.getElementById('editStatus').value = btn.dataset.status;
+
+            openModal('vehicleEditModal');
+        }
+
+        // Close a modal and reset form if exists
+        function closeModal(modal) {
+            modal.style.display = 'none';
+            const form = modal.querySelector('form');
+            if (form) form.reset();
+        }
+
+        // Click outside modal to close it
+        window.onclick = function(event) {
+            document.querySelectorAll('.modal').forEach(modal => {
+                if (event.target === modal) {
+                    closeModal(modal);
+                }
+            });
+        }
+    </script>
 </body>
 </html>
